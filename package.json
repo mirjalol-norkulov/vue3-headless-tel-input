@@ -1,6 +1,5 @@
 {
   "name": "vue3-headless-tel-input",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/vue3-headless-tel-input.umd.js",
@@ -23,8 +22,7 @@
     "@vueuse/core": "^9.11.1",
     "imask": "^6.4.3",
     "libphonenumber-js": "^1.10.18",
-    "vue": "^3.2.45",
-    "vue-imask": "^6.4.3"
+    "vue": "^3.2.45"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

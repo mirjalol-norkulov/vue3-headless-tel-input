@@ -698,18 +698,10 @@ vscode-textmate@^8.0.0:
   resolved "https://registry.yarnpkg.com/vscode-textmate/-/vscode-textmate-8.0.0.tgz#2c7a3b1163ef0441097e0b5d6389cd5504b59e5d"
   integrity sha512-AFbieoL7a5LMqcnOF04ji+rpXadgOXnZsxQr//r83kLPr7biP7am3g9zbaZIaBGwBRWeSvoMD4mgPdX3e4NWBg==
 
-vue-demi@*, vue-demi@^0.13.11:
+vue-demi@*:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.11.tgz#7d90369bdae8974d87b1973564ad390182410d99"
   integrity sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==
-
-vue-imask@^6.4.3:
-  version "6.4.3"
-  resolved "https://registry.yarnpkg.com/vue-imask/-/vue-imask-6.4.3.tgz#67dff21a8232d5c29e3b5d0c1c1f95293f085413"
-  integrity sha512-lGHtknLGZMtWPaQCkeqGrdOpXMq2LfPhiV1NaJ1Kn4YRNXOWFGZt135tRBs5W0gYXTP5g947andrxcJNlPW07g==
-  dependencies:
-    imask "^6.4.3"
-    vue-demi "^0.13.11"
 
 vue-template-compiler@^2.7.14:
   version "2.7.14"
