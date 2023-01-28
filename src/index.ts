@@ -86,11 +86,18 @@ export const useTelInput = (
         () => unref(initialValue),
         (val: any) => {
           if (maskInstance && val) {
-            const parsed = parsePhoneNumber(val);
-            if (parsed && parsed.nationalNumber && parsed.country) {
-              selectedCountry.value = parsed.country;
-              maskInstance.value = parsed.nationalNumber;
-              updateValues();
+            try {
+              const parsed = parsePhoneNumber(val);
+              if (parsed && parsed.nationalNumber && parsed.country) {
+                selectedCountry.value = parsed.country;
+                maskInstance.value = parsed.nationalNumber;
+                updateValues();
+              }
+            } catch (e: any) {
+              console.error(
+                "Error occurred while parsing given phone number. ",
+                e.message
+              );
             }
           }
         },
