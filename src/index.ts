@@ -58,6 +58,14 @@ export const useTelInput = (
     unmaskedValue.value = "";
   };
 
+  const updateValues = () => {
+    if (maskInstance) {
+      value.value = "+" + countryCallingCode.value + " " + maskInstance?.value;
+      unmaskedValue.value =
+        "+" + countryCallingCode.value + maskInstance?.unmaskedValue;
+    }
+  };
+
   // Initialize input with mask
   const initTelInput = (element: HTMLElement) => {
     const inputEl = getInputEl(element);
@@ -69,9 +77,7 @@ export const useTelInput = (
       lazy: false,
     });
     maskInstance.on("accept", () => {
-      value.value = "+" + countryCallingCode.value + " " + maskInstance?.value;
-      unmaskedValue.value =
-        "+" + countryCallingCode.value + maskInstance?.unmaskedValue;
+      updateValues();
     });
 
     if (!isWatcherSetForInitialValue.value) {
@@ -84,6 +90,7 @@ export const useTelInput = (
             if (parsed && parsed.nationalNumber && parsed.country) {
               selectedCountry.value = parsed.country;
               maskInstance.value = parsed.nationalNumber;
+              updateValues();
             }
           }
         },
