@@ -9,24 +9,26 @@ import {
 import examples from "libphonenumber-js/examples.mobile.json";
 
 import { useCountries } from "./composables/use-countries";
-import { getCountry } from "./utils";
+import { getCountry, getInputEl } from "./utils";
 
 export const useTelInput = (
   target: Ref<HTMLElement | HTMLInputElement | undefined | null>
 ) => {
   // Imask InputMask instance
-  let mask: IMask.InputMask<any> | null = null;
+  let maskInstance: IMask.InputMask<any> | null = null;
 
   // Current selected country
-  const country = ref<CountryCode>((getCountry() || "UZ") as CountryCode);
+  const selectedCountry = ref<CountryCode>(
+    (getCountry() || "UZ") as CountryCode
+  );
 
   const selectedCountryObject = computed(() =>
-    countries.value.find((c: any) => c.code === country.value)
+    countries.value.find((c: any) => c.code === selectedCountry.value)
   );
 
   // Calling code of the country, sucha s +998 for UZB
   const countryCallingCode = computed(() =>
-    getCountryCallingCode(country.value)
+    getCountryCallingCode(selectedCountry.value)
   );
 
   // List of countries with code, flags and name
@@ -47,16 +49,25 @@ export const useTelInput = (
   // Unmasked value
   const unmaskedValue = ref<string | undefined>();
 
+  const resetValues = () => {
+    value.value = "";
+    unmaskedValue.value = "";
+  };
+
   // Initialize input with mask
-  const initTelInput = (inputEl: HTMLElement | HTMLInputElement) => {
-    const maskInstance = IMask(inputEl, {
+  const initTelInput = (element: HTMLElement) => {
+    const inputEl = getInputEl(element);
+    if (!inputEl) {
+      throw new Error("Input element not found");
+    }
+    maskInstance = IMask(inputEl, {
       mask: maskString.value,
       lazy: false,
     });
     maskInstance.on("accept", () => {
-      value.value = "+" + countryCallingCode.value + " " + maskInstance.value;
+      value.value = "+" + countryCallingCode.value + " " + maskInstance?.value;
       unmaskedValue.value =
-        "+" + countryCallingCode.value + maskInstance.unmaskedValue;
+        "+" + countryCallingCode.value + maskInstance?.unmaskedValue;
     });
     return maskInstance;
   };
@@ -72,14 +83,31 @@ export const useTelInput = (
   );
 
   // Re initialize mask when country changes
-  watch(country, () => {
-    if (mask) {
-      mask.destroy();
-    }
+  watch(selectedCountry, () => {
     if (target.value) {
-      mask = initTelInput(target.value);
+      const inputEl = getInputEl(target.value);
+      if (inputEl) {
+        inputEl.value = "";
+        resetValues();
+
+        if (maskInstance) {
+          maskInstance.value = "";
+          maskInstance.unmaskedValue = "";
+          maskInstance.updateValue();
+        }
+      }
+      if (maskInstance) {
+        maskInstance.destroy();
+      }
+      initTelInput(target.value);
     }
   });
 
-  return { countries, value, unmaskedValue, country, selectedCountryObject };
+  return {
+    countries,
+    value,
+    unmaskedValue,
+    selectedCountry,
+    selectedCountryObject,
+  };
 };

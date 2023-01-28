@@ -2863,3 +2863,13 @@ export function getCountry() {
 
   return timezones[timezone].c[0];
 }
+
+export const getInputEl = (target: HTMLElement): HTMLInputElement | null => {
+  if (target.tagName.toLowerCase() === "input") {
+    return target as HTMLInputElement;
+  }
+
+  const input = target.querySelector("input");
+
+  return input;
+};

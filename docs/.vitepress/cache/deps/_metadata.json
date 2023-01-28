@@ -1,68 +1,47 @@
 {
-  "hash": "395d4326",
-  "browserHash": "9194f70a",
+  "hash": "951b0509",
+  "browserHash": "a4aabaee",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "0a572f0c",
+      "fileHash": "e2ea1b14",
       "needsInterop": false
     },
     "@theme/index": {
       "src": "../../../../node_modules/vitepress/dist/client/theme-default/index.js",
       "file": "@theme_index.js",
-      "fileHash": "ba9b8f0e",
-      "needsInterop": false
-    },
-    "libphonenumber-js": {
-      "src": "../../../../node_modules/libphonenumber-js/index.js",
-      "file": "libphonenumber-js.js",
-      "fileHash": "b0a48fcf",
-      "needsInterop": false
-    },
-    "libphonenumber-js/mobile/examples": {
-      "src": "../../../../node_modules/libphonenumber-js/examples.mobile.json.js",
-      "file": "libphonenumber-js_mobile_examples.js",
-      "fileHash": "0d47287b",
+      "fileHash": "42d0ef54",
       "needsInterop": false
     },
     "imask": {
       "src": "../../../../node_modules/imask/esm/index.js",
       "file": "imask.js",
-      "fileHash": "8012241e",
-      "needsInterop": false
-    },
-    "vue-imask": {
-      "src": "../../../../node_modules/vue-imask/esm/index.js",
-      "file": "vue-imask.js",
-      "fileHash": "0c938c24",
+      "fileHash": "50bfadeb",
       "needsInterop": false
     },
     "@vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "@vueuse_core.js",
-      "fileHash": "06311490",
+      "fileHash": "2d21629d",
+      "needsInterop": false
+    },
+    "libphonenumber-js": {
+      "src": "../../../../node_modules/libphonenumber-js/index.js",
+      "file": "libphonenumber-js.js",
+      "fileHash": "a2b058d7",
       "needsInterop": false
     },
     "libphonenumber-js/examples.mobile.json": {
       "src": "../../../../node_modules/libphonenumber-js/examples.mobile.json.js",
       "file": "libphonenumber-js_examples__mobile__json.js",
-      "fileHash": "e63bb9e1",
+      "fileHash": "83cab459",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-VJIXD5RP": {
-      "file": "chunk-VJIXD5RP.js"
-    },
-    "chunk-6NMAXBHK": {
-      "file": "chunk-6NMAXBHK.js"
-    },
     "chunk-6S52NMOK": {
       "file": "chunk-6S52NMOK.js"
-    },
-    "chunk-4KKMASQ3": {
-      "file": "chunk-4KKMASQ3.js"
     }
   }
 }

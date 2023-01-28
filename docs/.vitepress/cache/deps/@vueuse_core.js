@@ -1,10 +1,4 @@
 import {
-  del,
-  isVue2,
-  isVue3,
-  set
-} from "./chunk-6NMAXBHK.js";
-import {
   computed,
   customRef,
   effectScope,
@@ -34,6 +28,26 @@ import {
   watch,
   watchEffect
 } from "./chunk-6S52NMOK.js";
+
+// node_modules/vue-demi/lib/index.mjs
+var isVue2 = false;
+var isVue3 = true;
+function set(target, key, val) {
+  if (Array.isArray(target)) {
+    target.length = Math.max(target.length, key);
+    target.splice(key, 1, val);
+    return val;
+  }
+  target[key] = val;
+  return val;
+}
+function del(target, key) {
+  if (Array.isArray(target)) {
+    target.splice(key, 1);
+    return;
+  }
+  delete target[key];
+}
 
 // node_modules/@vueuse/shared/index.mjs
 var __defProp$9 = Object.defineProperty;
