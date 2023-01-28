@@ -4,12 +4,33 @@
   "type": "module",
   "main": "./dist/vue3-headless-tel-input.umd.js",
   "module": "./dist/vue3-headless-tel-input.es.js",
+  "author": "Mirjalol Norkulov",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mirjalol-norkulov/vue3-headless-tel-input"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "tel",
+    "phone",
+    "input",
+    "package",
+    "library",
+    "component",
+    "composable"
+  ],
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/vue3-headless-tel-input.es.js",
       "require": "./dist/vue3-headless-tel-input.umd.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
@@ -22,7 +43,6 @@
     "@vueuse/core": "^9.11.1",
     "imask": "^6.4.3",
     "libphonenumber-js": "^1.10.18",
-    "rollup-plugin-typescript2": "^0.34.1",
     "vue": "^3.2.45"
   },
   "devDependencies": {

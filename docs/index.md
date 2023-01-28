@@ -1,3 +1,14 @@
+<script setup lang="ts">
+  import { ref } from "vue"
+import { useTelInput } from "../src/index"
+const input = ref()
+const initialValue = ref()
+const { value } = useTelInput(input, initialValue)
+</script>
+
+<input ref="input" />
+<button @click="initialValue = '+998931067337'">Change value</button>
+
 # Vue 3 headless tel input docs
 
 ## Installation

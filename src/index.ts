@@ -1,10 +1,11 @@
-import { computed, ref, watch, type Ref } from "vue";
+import { computed, ref, unref, watch, type Ref } from "vue";
 import IMask from "imask";
 import { unrefElement } from "@vueuse/core";
 import {
   AsYouType,
   CountryCode,
   getCountryCallingCode,
+  parsePhoneNumber,
 } from "libphonenumber-js";
 import examples from "libphonenumber-js/examples.mobile.json";
 
@@ -12,8 +13,10 @@ import { useCountries } from "./composables/use-countries";
 import { getCountry, getInputEl } from "./utils";
 
 export const useTelInput = (
-  target: Ref<HTMLElement | HTMLInputElement | undefined | null>
+  target: Ref<HTMLElement | HTMLInputElement | undefined | null>,
+  initialValue?: Ref<string | null | undefined> | string | null | undefined
 ) => {
+  const isWatcherSetForInitialValue = ref(false);
   // Imask InputMask instance
   let maskInstance: IMask.InputMask<any> | null = null;
 
@@ -70,6 +73,23 @@ export const useTelInput = (
       unmaskedValue.value =
         "+" + countryCallingCode.value + maskInstance?.unmaskedValue;
     });
+
+    if (!isWatcherSetForInitialValue.value) {
+      // Watch given initial value and update value of the mask
+      watch(
+        () => unref(initialValue),
+        (val: any) => {
+          if (maskInstance && val) {
+            const parsed = parsePhoneNumber(val);
+            if (parsed && parsed.nationalNumber && parsed.country) {
+              selectedCountry.value = parsed.country;
+              maskInstance.value = parsed.nationalNumber;
+            }
+          }
+        },
+        { immediate: true }
+      );
+    }
     return maskInstance;
   };
 
