@@ -36,8 +36,9 @@ export const useTelInput = (
 
   // Mask for imask depending on country code
   const maskString = computed(() => {
-    const asYouType: any = new AsYouType(country.value);
-    const template = "+" + countryCallingCode.value + examples[country.value];
+    const asYouType: any = new AsYouType(selectedCountry.value);
+    const template =
+      "+" + countryCallingCode.value + examples[selectedCountry.value];
     asYouType.input(template);
 
     return asYouType.formatter.nationalNumberTemplate?.replaceAll("x", "0");
