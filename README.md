@@ -11,6 +11,8 @@ With yarn
 `yarn add vue3-headless-tel-input`
 
 
+[Official documentation](https://tel-input.netlify.app)
+
 ## Usage
 
 Import composable and pass ref of the input element to the composable

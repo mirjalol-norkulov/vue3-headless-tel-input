@@ -6,6 +6,7 @@
   "module": "./dist/vue3-headless-tel-input.es.js",
   "author": "Mirjalol Norkulov",
   "license": "MIT",
+  "homepage": "https://vue3-tel-input.netlify.app",
   "repository": {
     "type": "git",
     "url": "https://github.com/mirjalol-norkulov/vue3-headless-tel-input"

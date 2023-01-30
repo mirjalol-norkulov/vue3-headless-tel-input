@@ -22,7 +22,7 @@ import { useTelInput } from "vue3-headless-tel-input"
 
 const input = ref()
 const { 
-  countries, selectedCountry, selectedCountryObject, 
+  countries, selectedCountry, selectedCountryObject, updateValue
   value, unmaskedValue 
 } = useTelInput(input)
 ```
@@ -38,6 +38,46 @@ Template part
       </option>
     </select>
     <input ref="input" />
+  </div>
+</template>
+```
+
+
+### Vue component example with v-model
+
+```ts
+<script setup>
+import { ref } from "vue"
+import { useTelInput } from "vue3-headless-tel-input"
+
+const props = defineProps({
+  modelValue: String,
+  default: undefined
+});
+const emit = defineEmit(["update:model-value"])
+
+const inputEl = ref();
+
+const { selectedCountry, selectedCountryObject, unmaskedValue, updateValue } = useTelInput(inputEl);
+
+watch(unmaskedValue, (value) => {
+  emit("update:model-value", value);
+})
+watch(() => props.modelValue, (value) => {
+  updateValue(value);
+})
+</script>
+```
+
+```html
+<template>
+  <div>
+    <select v-for="country in countries" :key="country.code" v-model="selectedCountry">
+      <option :value="country.code">
+        {{ country.name.common }} {{ country.callingCode }}
+      </option>
+    </select>
+    <input ref="inputEl" />
   </div>
 </template>
 ```

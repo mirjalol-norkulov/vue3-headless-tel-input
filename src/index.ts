@@ -1,4 +1,4 @@
-import { computed, ref, unref, isRef, watch, type Ref } from "vue";
+import { computed, ref, watch, type Ref } from "vue";
 import IMask from "imask";
 import { unrefElement } from "@vueuse/core";
 import {
@@ -11,6 +11,8 @@ import examples from "libphonenumber-js/examples.mobile.json";
 
 import { useCountries } from "./composables/use-countries";
 import { getCountry, getInputEl } from "./utils";
+import { Country } from "./types";
+export * from "./types";
 
 export const useTelInput = (
   target: Ref<HTMLElement | HTMLInputElement | undefined | null>
@@ -23,7 +25,7 @@ export const useTelInput = (
     (getCountry() || "UZ") as CountryCode
   );
 
-  const selectedCountryObject = computed(() =>
+  const selectedCountryObject = computed<Country | undefined>(() =>
     countries.value.find((c: any) => c.code === selectedCountry.value)
   );
 

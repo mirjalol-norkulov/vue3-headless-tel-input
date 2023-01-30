@@ -1,15 +1,6 @@
-import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { ref } from "vue";
-
-export interface Country {
-  name: {
-    common: string;
-    official: string;
-    nativeName: Record<string, unknown>;
-  };
-  code: string;
-  flag: string;
-}
+import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+import type { Country } from "../types";
 
 const fetchCountries = () => {
   return fetch("https://restcountries.com/v3/all?fields=flags,cca2,name").then(
@@ -19,7 +10,7 @@ const fetchCountries = () => {
 
 export const useCountries = () => {
   const availableCountries = getCountries();
-  const countries = ref([]);
+  const countries = ref<Country[]>([]);
 
   fetchCountries().then((data) => {
     countries.value = data
