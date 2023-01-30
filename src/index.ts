@@ -1,4 +1,4 @@
-import { computed, ref, unref, watch, type Ref } from "vue";
+import { computed, ref, unref, isRef, watch, type Ref } from "vue";
 import IMask from "imask";
 import { unrefElement } from "@vueuse/core";
 import {
@@ -13,10 +13,8 @@ import { useCountries } from "./composables/use-countries";
 import { getCountry, getInputEl } from "./utils";
 
 export const useTelInput = (
-  target: Ref<HTMLElement | HTMLInputElement | undefined | null>,
-  initialValue?: Ref<string | null | undefined> | string | null | undefined
+  target: Ref<HTMLElement | HTMLInputElement | undefined | null>
 ) => {
-  const isWatcherSetForInitialValue = ref(false);
   // Imask InputMask instance
   let maskInstance: IMask.InputMask<any> | null = null;
 
@@ -80,30 +78,6 @@ export const useTelInput = (
       updateValues();
     });
 
-    if (!isWatcherSetForInitialValue.value) {
-      // Watch given initial value and update value of the mask
-      watch(
-        () => unref(initialValue),
-        (val: any) => {
-          if (maskInstance && val) {
-            try {
-              const parsed = parsePhoneNumber(val);
-              if (parsed && parsed.nationalNumber && parsed.country) {
-                selectedCountry.value = parsed.country;
-                maskInstance.value = parsed.nationalNumber;
-                updateValues();
-              }
-            } catch (e: any) {
-              console.error(
-                "Error occurred while parsing given phone number. ",
-                e.message
-              );
-            }
-          }
-        },
-        { immediate: true }
-      );
-    }
     return maskInstance;
   };
 
@@ -120,17 +94,11 @@ export const useTelInput = (
   // Re initialize mask when country changes
   watch(selectedCountry, () => {
     if (target.value) {
-      const inputEl = getInputEl(target.value);
-      if (inputEl) {
-        inputEl.value = "";
+      if (maskInstance) {
         resetValues();
-
-        if (maskInstance) {
-          maskInstance.value = "";
-          maskInstance.unmaskedValue = "";
-          maskInstance.updateValue();
-        }
+        maskInstance.updateValue();
       }
+
       if (maskInstance) {
         maskInstance.destroy();
       }
@@ -138,11 +106,29 @@ export const useTelInput = (
     }
   });
 
+  const updateValue = (value: string | undefined) => {
+    if (maskInstance) {
+      if (value) {
+        try {
+          const parsed = parsePhoneNumber(value);
+          if (parsed && parsed.nationalNumber && parsed.country) {
+            selectedCountry.value = parsed.country;
+            maskInstance.value = parsed.nationalNumber;
+            updateValues();
+          }
+        } catch (e: any) {}
+      } else {
+        maskInstance.value = "";
+      }
+    }
+  };
+
   return {
     countries,
     value,
     unmaskedValue,
     selectedCountry,
     selectedCountryObject,
+    updateValue,
   };
 };
