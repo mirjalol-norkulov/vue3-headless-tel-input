@@ -3,9 +3,9 @@ import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import type { Country } from "../types";
 
 const fetchCountries = () => {
-  return fetch("https://restcountries.com/v3/all?fields=flags,cca2,name").then(
-    (response) => response.json()
-  );
+  return fetch(
+    "https://restcountries.com/v2/all?fields=name,alpha2Code,flag"
+  ).then((response) => response.json());
 };
 
 export const useCountries = () => {
@@ -14,12 +14,13 @@ export const useCountries = () => {
 
   fetchCountries().then((data) => {
     countries.value = data
-      .filter((country: any) => availableCountries.includes(country.cca2))
+      .filter((country: any) => availableCountries.includes(country.alpha2Code))
       .map((country: any) => ({
         name: country.name,
-        code: country.cca2,
-        flag: country.flags[0],
-        callingCode: "+" + getCountryCallingCode(country.cca2.toUpperCase()),
+        code: country.alpha2Code,
+        flag: country.flag,
+        callingCode:
+          "+" + getCountryCallingCode(country.alpha2Code.toUpperCase()),
       }));
   });
 
