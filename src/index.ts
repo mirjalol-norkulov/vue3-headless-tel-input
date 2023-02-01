@@ -15,7 +15,10 @@ import countries from "./countries.json";
 export * from "./types";
 
 export interface UseTelInputOptions {
-  onUpdate?: (unmaskedValue: string, value: string) => void;
+  onUpdate?: (
+    unmaskedValue: string | undefined,
+    value: string | undefined
+  ) => void;
 }
 
 export const useTelInput = (
