@@ -1,4 +1,4 @@
-import { computed, ref, watch, type Ref } from "vue";
+import { computed, ref, watch, type Ref, isRef } from "vue";
 import IMask from "imask";
 import { unrefElement } from "@vueuse/core";
 import {
@@ -9,13 +9,14 @@ import {
 } from "libphonenumber-js";
 import examples from "libphonenumber-js/examples.mobile.json";
 
-import { useCountries } from "./composables/use-countries";
 import { getCountry, getInputEl } from "./utils";
 import { Country } from "./types";
+import countries from "./countries.json";
 export * from "./types";
 
 export const useTelInput = (
-  target: Ref<HTMLElement | HTMLInputElement | undefined | null>
+  target: Ref<HTMLElement | HTMLInputElement | undefined | null>,
+  initialValue?: Ref<string | undefined> | string
 ) => {
   // Imask InputMask instance
   let maskInstance: IMask.InputMask<any> | null = null;
@@ -25,17 +26,17 @@ export const useTelInput = (
     (getCountry() || "UZ") as CountryCode
   );
 
-  const selectedCountryObject = computed<Country | undefined>(() =>
-    countries.value.find((c: any) => c.code === selectedCountry.value)
+  const selectedCountryObject = computed<Country | undefined | null>(
+    () =>
+      countries.find((c: any) => c.code === selectedCountry.value) as
+        | Country
+        | undefined
   );
 
   // Calling code of the country, sucha s +998 for UZB
   const countryCallingCode = computed(() =>
     getCountryCallingCode(selectedCountry.value)
   );
-
-  // List of countries with code, flags and name
-  const countries = useCountries();
 
   // Mask for imask depending on country code
   const maskString = computed(() => {
@@ -89,6 +90,19 @@ export const useTelInput = (
     (element) => {
       if (element) {
         initTelInput(element);
+        setTimeout(() => {
+          if (isRef(initialValue)) {
+            watch(
+              initialValue,
+              () => {
+                updateValue(initialValue.value);
+              },
+              { immediate: true }
+            );
+          } else {
+            updateValue(initialValue);
+          }
+        }, 0);
       }
     }
   );
@@ -115,12 +129,30 @@ export const useTelInput = (
           const parsed = parsePhoneNumber(value);
           if (parsed && parsed.nationalNumber && parsed.country) {
             selectedCountry.value = parsed.country;
-            maskInstance.value = parsed.nationalNumber;
-            updateValues();
+
+            const masked = IMask.createMask({
+              mask: maskString.value,
+            });
+
+            const maskedValue = masked.resolve(parsed.nationalNumber);
+
+            setTimeout(() => {
+              if (maskInstance) {
+                maskInstance.value = maskedValue;
+                maskInstance.unmaskedValue = parsed.nationalNumber;
+                maskInstance.updateValue();
+                updateValues();
+              }
+            }, 0);
           }
-        } catch (e: any) {}
+        } catch (e: any) {
+          console.log(e.message);
+        }
       } else {
         maskInstance.value = "";
+        maskInstance.unmaskedValue = "";
+        maskInstance.updateValue();
+        updateValues();
       }
     }
   };

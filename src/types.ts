@@ -1,11 +1,7 @@
 import type { CountryCode } from "libphonenumber-js";
 
 export interface Country {
-  name: {
-    common: string;
-    official: string;
-    nativeName: Record<string, unknown>;
-  };
+  name: string;
   code: CountryCode;
   flag: string;
   callingCode: string;
