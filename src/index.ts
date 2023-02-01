@@ -88,7 +88,7 @@ export const useTelInput = (
     maskInstance.on("accept", () => {
       updateValues();
       if (options?.onUpdate) {
-        options.onUpdate(maskInstance?.unmaskedValue, maskInstance?.value);
+        options.onUpdate(unmaskedValue.value, value.value);
       }
     });
 

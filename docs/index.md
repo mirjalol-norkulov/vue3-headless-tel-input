@@ -47,7 +47,7 @@ Template part
 
 ```ts
 <script setup>
-import { ref } from "vue"
+import { ref, toRef } from "vue"
 import { useTelInput } from "vue3-headless-tel-input"
 
 const props = defineProps({
@@ -56,16 +56,16 @@ const props = defineProps({
 });
 const emit = defineEmit(["update:model-value"])
 
+const value = toRef(props, "modelValue");
+
 const inputEl = ref();
 
-const { selectedCountry, selectedCountryObject, unmaskedValue, updateValue } = useTelInput(inputEl);
+const { selectedCountry, selectedCountryObject, unmaskedValue, updateValue } = useTelInput(inputEl, value, { 
+  onUpdate(unmaskedValue, value) {
+    emit("update:model-value", unmaskedValue);
+  }
+});
 
-watch(unmaskedValue, (value) => {
-  emit("update:model-value", value);
-})
-watch(() => props.modelValue, (value) => {
-  updateValue(value);
-})
 </script>
 ```
 
