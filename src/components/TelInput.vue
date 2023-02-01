@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, toRef } from "vue";
+import { ref, toRef } from "vue";
 import { useTelInput } from "..";
 
 const props = defineProps({
@@ -13,14 +13,18 @@ const emit = defineEmits(["update:model-value"]);
 const value = toRef(props, "modelValue");
 const input = ref();
 
-const { unmaskedValue, countries, selectedCountry, updateValue } = useTelInput(
+const { unmaskedValue, countries, selectedCountry } = useTelInput(
   input,
-  value
+  value,
+  {
+    onUpdate(
+      unmaskedValue: string | undefined,
+      maskedValue: string | undefined
+    ) {
+      emit("update:model-value", unmaskedValue);
+    },
+  }
 );
-
-watch(unmaskedValue, () => {
-  emit("update:model-value", unmaskedValue.value);
-});
 </script>
 
 <template>
