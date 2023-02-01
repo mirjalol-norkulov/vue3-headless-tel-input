@@ -14,9 +14,14 @@ import { Country } from "./types";
 import countries from "./countries.json";
 export * from "./types";
 
+export interface UseTelInputOptions {
+  onUpdate?: (unmaskedValue: string, value: string) => void;
+}
+
 export const useTelInput = (
   target: Ref<HTMLElement | HTMLInputElement | undefined | null>,
-  initialValue?: Ref<string | undefined> | string
+  initialValue?: Ref<string | undefined> | string,
+  options?: UseTelInputOptions
 ) => {
   // Imask InputMask instance
   let maskInstance: IMask.InputMask<any> | null = null;
@@ -79,6 +84,9 @@ export const useTelInput = (
     });
     maskInstance.on("accept", () => {
       updateValues();
+      if (options?.onUpdate) {
+        options.onUpdate(maskInstance?.unmaskedValue, maskInstance?.value);
+      }
     });
 
     return maskInstance;
