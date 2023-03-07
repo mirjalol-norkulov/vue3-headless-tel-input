@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRef } from "vue";
+import { watch, toRef } from "vue";
 import { useTelInput } from "..";
 
 const props = defineProps({
@@ -11,20 +11,13 @@ const props = defineProps({
 const emit = defineEmits(["update:model-value"]);
 
 const value = toRef(props, "modelValue");
-const input = ref();
 
-const { unmaskedValue, countries, selectedCountry } = useTelInput(
-  input,
-  value,
-  {
-    onUpdate(
-      unmaskedValue: string | undefined,
-      maskedValue: string | undefined
-    ) {
-      emit("update:model-value", unmaskedValue);
-    },
-  }
-);
+const { inputRef, unmaskedValue, countries, selectedCountry } =
+  useTelInput(value);
+
+watch(unmaskedValue, () => {
+  emit("update:model-value", unmaskedValue.value);
+});
 </script>
 
 <template>
@@ -39,6 +32,6 @@ const { unmaskedValue, countries, selectedCountry } = useTelInput(
         {{ country.name }} {{ country.callingCode }}
       </option>
     </select>
-    <input ref="input" />
+    <input ref="inputRef" />
   </div>
 </template>

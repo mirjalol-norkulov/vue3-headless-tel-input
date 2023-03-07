@@ -15,14 +15,13 @@ With yarn
 
 ## Usage
 
-Import composable and pass ref of the input element to the composable
+Import composable give returned ref to the input
 
 ```ts
-import { ref } from "vue"
 import { useTelInput } from "vue3-headless-tel-input"
 
-const input = ref()
-const { 
+const {
+  inputRef, 
   countries, selectedCountry, selectedCountryObject, 
   value, unmaskedValue 
 } = useTelInput(input)
@@ -38,7 +37,7 @@ Template part
         {{ country.callingCode }}
       </option>
     </select>
-    <input ref="input" />
+    <input ref="inputRef" />
   </div>
 </template>
 ```
@@ -47,7 +46,7 @@ Template part
 
 ```ts
 <script setup>
-import { ref, toRef } from "vue"
+import { toRef, watch } from "vue"
 import { useTelInput } from "vue3-headless-tel-input"
 
 const props = defineProps({
@@ -58,14 +57,11 @@ const emit = defineEmit(["update:model-value"])
 
 const value = toRef(props, "modelValue");
 
-const inputEl = ref();
+const { inputRef, selectedCountry, selectedCountryObject, unmaskedValue } = useTelInput(value);
 
-const { selectedCountry, selectedCountryObject, unmaskedValue, updateValue } = useTelInput(inputEl, value, { 
-  onUpdate(unmaskedValue, value) {
-    emit("update:model-value", unmaskedValue);
-  }
+watch(unmaskedValue, () => {
+  emit("update:model-value", unmaskedValue.value);
 });
-
 </script>
 ```
 
@@ -77,7 +73,7 @@ const { selectedCountry, selectedCountryObject, unmaskedValue, updateValue } = u
         {{ country.name.common }} {{ country.callingCode }}
       </option>
     </select>
-    <input ref="inputEl" />
+    <input ref="inputRef" />
   </div>
 </template>
 ```

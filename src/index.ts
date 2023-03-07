@@ -1,6 +1,6 @@
-import { computed, ref, watch, type Ref, isRef } from "vue";
+import { computed, ref, watch, isRef } from "vue";
 import IMask from "imask";
-import { unrefElement } from "@vueuse/core";
+import { MaybeRef, unrefElement } from "@vueuse/core";
 import {
   AsYouType,
   CountryCode,
@@ -22,11 +22,12 @@ export interface UseTelInputOptions {
 }
 
 export const useTelInput = (
-  target: Ref<HTMLElement | HTMLInputElement | undefined | null>,
-  initialValue?: Ref<string | undefined> | string,
+  initialValue?: MaybeRef<string | undefined | null>,
   options?: UseTelInputOptions
 ) => {
+  const inputEl = ref();
   // Imask InputMask instance
+
   let maskInstance: IMask.InputMask<any> | null = null;
 
   // Current selected country
@@ -56,7 +57,7 @@ export const useTelInput = (
     return asYouType.formatter.nationalNumberTemplate?.replaceAll("x", "0");
   });
 
-  // Value of the input
+  // Masked value of the input
   const value = ref<string | undefined>();
 
   // Unmasked value
@@ -97,9 +98,9 @@ export const useTelInput = (
     return maskInstance;
   };
 
-  // call init function when input elements will be available using watch
+  // call init function when input element will be available using watch
   watch(
-    () => unrefElement(target),
+    () => unrefElement(inputEl),
     (element) => {
       if (element) {
         initTelInput(element);
@@ -107,13 +108,13 @@ export const useTelInput = (
           if (isRef(initialValue)) {
             watch(
               initialValue,
-              () => {
-                updateValue(initialValue.value);
+              (val) => {
+                updateMaskValue(val || "");
               },
               { immediate: true }
             );
-          } else {
-            updateValue(initialValue);
+          } else if (initialValue) {
+            updateMaskValue(initialValue || "");
           }
         }, 0);
       }
@@ -122,7 +123,7 @@ export const useTelInput = (
 
   // Re initialize mask when country changes
   watch(selectedCountry, () => {
-    if (target.value) {
+    if (inputEl.value) {
       if (maskInstance) {
         resetValues();
         maskInstance.updateValue();
@@ -131,51 +132,52 @@ export const useTelInput = (
       if (maskInstance) {
         maskInstance.destroy();
       }
-      initTelInput(target.value);
+      initTelInput(inputEl.value);
     }
   });
 
-  const updateValue = (value: string | undefined) => {
-    if (maskInstance) {
-      if (value) {
-        try {
-          const parsed = parsePhoneNumber(value);
-          if (parsed && parsed.nationalNumber && parsed.country) {
-            selectedCountry.value = parsed.country;
+  const updateMaskValue = (value: string | undefined) => {
+    if (!maskInstance) {
+      return;
+    }
 
-            const masked = IMask.createMask({
-              mask: maskString.value,
-            });
+    if (!value) {
+      maskInstance.value = "";
+      maskInstance.unmaskedValue = "";
+      maskInstance.updateValue();
+      updateValues();
+      return;
+    }
 
-            const maskedValue = masked.resolve(parsed.nationalNumber);
+    try {
+      const parsed = parsePhoneNumber(value);
+      if (parsed && parsed.nationalNumber && parsed.country) {
+        selectedCountry.value = parsed.country;
 
-            setTimeout(() => {
-              if (maskInstance) {
-                maskInstance.value = maskedValue;
-                maskInstance.unmaskedValue = parsed.nationalNumber;
-                maskInstance.updateValue();
-                updateValues();
-              }
-            }, 0);
-          }
-        } catch (e: any) {
-          console.log(e.message);
+        const masked = IMask.createMask({
+          mask: maskString.value,
+        });
+
+        const maskedValue = masked.resolve(parsed.nationalNumber);
+
+        if (maskInstance) {
+          maskInstance.value = maskedValue;
+          maskInstance.unmaskedValue = parsed.nationalNumber;
+          maskInstance.updateValue();
+          updateValues();
         }
-      } else {
-        maskInstance.value = "";
-        maskInstance.unmaskedValue = "";
-        maskInstance.updateValue();
-        updateValues();
       }
+    } catch (e: any) {
+      console.log(e.message);
     }
   };
 
   return {
+    inputRef: inputEl,
     countries,
     value,
     unmaskedValue,
     selectedCountry,
     selectedCountryObject,
-    updateValue,
   };
 };
