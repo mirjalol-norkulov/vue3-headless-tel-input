@@ -1,6 +1,6 @@
 {
   "name": "vue3-headless-tel-input",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "type": "module",
   "main": "./dist/vue3-headless-tel-input.umd.js",
   "module": "./dist/vue3-headless-tel-input.es.js",
