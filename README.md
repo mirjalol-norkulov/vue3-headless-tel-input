@@ -15,7 +15,7 @@ With yarn
 
 ## Usage
 
-Import composable give returned ref to the input
+Import composable and give returned ref to the input
 
 ```ts
 import { useTelInput } from "vue3-headless-tel-input"

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-
+import TelInput from "../src/components/TelInput.vue"
 const value = ref();
 </script>
+
 
 # Vue 3 headless tel input docs
 
