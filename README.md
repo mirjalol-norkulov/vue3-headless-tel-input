@@ -11,7 +11,7 @@ With yarn
 `yarn add vue3-headless-tel-input`
 
 
-[Official documentation](https://tel-input.netlify.app)
+[Official documentation](https://vue3-tel-input.netlify.app)
 
 ## Usage
 
