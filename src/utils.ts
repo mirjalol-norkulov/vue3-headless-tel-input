@@ -1,6 +1,6 @@
 import parsePhoneNumber from "libphonenumber-js";
 
-export function getCountry(phoneNumber?: string) {
+export function getCountry(phoneNumber?: string | null) {
   if (phoneNumber) {
     const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
     if (parsedPhoneNumber?.isValid()) {
