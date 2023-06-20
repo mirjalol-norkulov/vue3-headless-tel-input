@@ -1,4 +1,13 @@
-export function getCountry() {
+import parsePhoneNumber from "libphonenumber-js";
+
+export function getCountry(phoneNumber?: string) {
+  if (phoneNumber) {
+    const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
+    if (parsedPhoneNumber?.isValid()) {
+      return parsedPhoneNumber.country;
+    }
+  }
+
   const countries: any = {
     AD: "Andorra",
     AE: "United Arab Emirates",

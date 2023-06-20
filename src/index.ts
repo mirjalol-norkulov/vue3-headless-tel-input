@@ -1,4 +1,4 @@
-import { computed, ref, watch, isRef } from "vue";
+import { computed, ref, watch, isRef, unref } from "vue";
 import IMask from "imask";
 import { MaybeRef, unrefElement } from "@vueuse/core";
 import {
@@ -26,13 +26,13 @@ export const useTelInput = (
   options?: UseTelInputOptions
 ) => {
   const inputEl = ref();
-  // Imask InputMask instance
 
+  // Imask InputMask instance
   let maskInstance: IMask.InputMask<any> | null = null;
 
   // Current selected country
   const selectedCountry = ref<CountryCode>(
-    (getCountry() || "UZ") as CountryCode
+    (getCountry(unref(initialValue)) || "UZ") as CountryCode
   );
 
   const selectedCountryObject = computed<Country | undefined | null>(

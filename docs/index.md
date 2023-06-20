@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import TelInput from "../src/components/TelInput.vue"
-const value = ref();
+const value = ref('+16102347740');
 </script>
 
 
