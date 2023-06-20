@@ -9,7 +9,7 @@ import {
 } from "libphonenumber-js";
 import examples from "libphonenumber-js/examples.mobile.json";
 
-import { getCountry, getInputEl } from "./utils";
+import { getCountry, getCountryByPhoneNumber, getInputEl } from "./utils";
 import { Country } from "./types";
 import countries from "./countries.json";
 export * from "./types";
@@ -29,6 +29,18 @@ export const useTelInput = (
 
   // Imask InputMask instance
   let maskInstance: IMask.InputMask<any> | null = null;
+
+  watch(
+    () => unref(initialValue),
+    (value) => {
+      if (value) {
+        const country = getCountryByPhoneNumber(value);
+        if (country) {
+          selectedCountry.value = country;
+        }
+      }
+    }
+  );
 
   // Current selected country
   const selectedCountry = ref<CountryCode>(

@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import TelInput from "../src/components/TelInput.vue"
-const value = ref('+16102347740');
+const value = ref();
+
+setTimeout(() => {
+  value.value = '+16102347740'
+}, 3000)
 </script>
 
+<TelInput v-model="value" />
 
 # Vue 3 headless tel input docs
 

@@ -2882,3 +2882,12 @@ export const getInputEl = (target: HTMLElement): HTMLInputElement | null => {
 
   return input;
 };
+
+export function getCountryByPhoneNumber(phoneNumber: string) {
+  const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
+  if (parsedPhoneNumber?.isValid()) {
+    return parsedPhoneNumber.country;
+  }
+
+  return null;
+}

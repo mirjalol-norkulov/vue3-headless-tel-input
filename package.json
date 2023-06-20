@@ -44,7 +44,7 @@
     "@vueuse/core": "^9.11.1",
     "imask": "^6.4.3",
     "libphonenumber-js": "^1.10.18",
-    "vue": "^3.2.33"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

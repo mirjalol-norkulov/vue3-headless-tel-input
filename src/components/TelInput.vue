@@ -32,6 +32,15 @@ watch(unmaskedValue, () => {
         {{ country.name }} {{ country.callingCode }}
       </option>
     </select>
-    <input ref="inputRef" />
+    <input ref="inputRef" class="tel-input" />
   </div>
 </template>
+
+<style>
+.tel-input {
+  padding: 1rem;
+  height: 36px;
+  border: solid 1px lightgray;
+  border-radius: 0.5rem;
+}
+</style>
